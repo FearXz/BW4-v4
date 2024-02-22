@@ -103,15 +103,10 @@ namespace BW4
 
         protected void Modifica_Click(object sender, EventArgs e)
         {
-
-
             string idString = ((Button)sender).CommandArgument;
             int id = int.Parse(idString);
 
             Response.Redirect("Admin.aspx?IdProdotto=" + id);
-
-
-
         }
 
         protected void modificaProdotto_Click(object sender, EventArgs e)
@@ -177,7 +172,6 @@ namespace BW4
                 cmd.Parameters.AddWithValue("@Attivo", 0);
 
                 SqlDataReader reader = cmd.ExecuteReader();
-
 
             }
             catch (Exception ex)
