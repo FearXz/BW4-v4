@@ -1,0 +1,117 @@
+﻿body {
+    background-color: #e7dfdf;
+}
+
+.navColor {
+    background-color: #47738f;
+    color: white;
+}
+
+.colorForm {
+    background-color: #f8f9fa;
+}
+
+.cart {
+    transition: background-color 0.3s, transform 0.3s, color 0.3s;
+}
+
+    .cart:hover {
+        background-color: #ffc107;
+        color: #47738f;
+    }
+
+.ombra {
+    transition: box-shadow 0.3s;
+}
+
+    .ombra:hover {
+        box-shadow: 4px 4px 10px #201e1eab;
+    }
+
+main .btnChange {
+    transition: background-color 0.3s, transform 0.3s;
+    border-color: cornsilk;
+}
+
+    main .btnChange:hover {
+        background-color: #47738f;
+    }
+
+div .btnDanger {
+    transition: background-color 0.3s, transform 0.3s;
+    background-color: slategray;
+}
+
+    div .btnDanger:hover {
+        background-color: #a50e0e;
+        color: white
+    }
+
+div .btnLog {
+    background-color: #47738f;
+}
+
+    div .btnLog:hover {
+        background-color: #234357;
+    }
+
+main .prodotto {
+    width: 200px;
+    border: 1px solid #47738f;
+}
+
+main .imgProdotto {
+    height: 30vh;
+    object-fit: contain;
+}
+
+main .cardBody {
+    background-color: #919fa8;
+}
+
+nav .linkHover {
+    color: white;
+    font-weight: bold;
+}
+
+    nav .linkHover:hover {
+        color: #ffc107;
+    }
+
+main .descProdotto {
+    border: 2px solid #47738f;
+    background-color: #919fa8;
+}
+
+div .username {
+    color: lightgray;
+    font-weight: 700;
+    font-family:'Times New Roman', Times, serif
+}
+
+div .btnModify {
+    transition: background-color 0.3s;
+    background-color: #6c757d;
+}
+
+    div .btnModify:hover {
+        background-color: #47738f;
+    }
+
+div .btnLogout {
+    font-weight:bold;
+}
+
+div .btnLogout:hover {
+    background-color: #a50e0e;
+}
+
+div .btnPage {
+    background-color: #47738f;
+    color: white;
+    transition: background-color 0.3s;
+}
+    div .btnPage:hover {
+        background-color: #2d485a;
+        color: white;
+    }
