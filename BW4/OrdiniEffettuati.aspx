@@ -1,29 +1,23 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="OrdiniEffettuati.aspx.cs" Inherits="BW4.OrdiniEffettuati" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-      <div class="container-fluid mb-5">
+    <div class="container-fluid mb-5">
         <div class="row">
             <div class="col-8 d-flex justify-content-between align-items-center">
                 <h2>Storico Ordini</h2>
-
             </div>
             <div class="row">
-
-
                 <asp:Repeater ID="Repeater1" runat="server">
                     <ItemTemplate>
                         <div class="col-auto">
                             <div class="container p-4 m-2 d-flex border border-1  rounded-4">
-
-
                                 <div class="d-flex flex-column">
                                     <h5>Ordine n°: <%# Eval("IDOrdine") %></h5>
                                     <p>Data acquisto: <%# ((DateTime)Eval("DataAcquisto")).ToString("dd/MM/yyyy") %></p>
-                                     <p>Costo Totale: <%#  Eval("CostoTotale") %></p>
+                                    <p>Costo Totale: <%#  Eval("CostoTotale") %></p>
                                     <p>Quantita: <%# Eval("Quantita") %></p>
                                     <asp:Button ID="Dettagli" runat="server" Text="Dettagli Ordine" CssClass="btn btn-secondary" OnClick="Dettagli_Click" CommandArgument='<%# Eval("IDOrdine") %>' />
-
                                 </div>
-
                             </div>
                         </div>
                     </ItemTemplate>
@@ -74,11 +68,6 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
-
                 </div>
             </div>
         </div>

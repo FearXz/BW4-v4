@@ -20,7 +20,8 @@ namespace BW4
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
             SqlConnection conn = new SqlConnection(connectionString);
             {
-                string query = "SELECT COUNT(*) FROM Utente WHERE Username = @Username OR Email = @Email";
+                string query =
+                    "SELECT COUNT(*) FROM Utente WHERE Username = @Username OR Email = @Email";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Username", usernameInput.Value);
                 cmd.Parameters.AddWithValue("@Email", emailInput.Value);
@@ -34,12 +35,14 @@ namespace BW4
                     return;
                 }
 
-                string connectionString2 = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
+                string connectionString2 = ConfigurationManager
+                    .ConnectionStrings["MyDb"]
+                    .ToString();
 
                 try
                 {
-
-                    string query2 = "INSERT into Utente(Nome, Cognome, Email, DataNascita, Username, Password, IDTipoUtente) VALUES (@Nome, @Cognome, @Email, @DataNascita, @Username, @Password, 2)";
+                    string query2 =
+                        "INSERT into Utente(Nome, Cognome, Email, DataNascita, Username, Password, IDTipoUtente) VALUES (@Nome, @Cognome, @Email, @DataNascita, @Username, @Password, 2)";
 
                     SqlCommand cmd2 = new SqlCommand(query2, conn);
 
@@ -50,11 +53,9 @@ namespace BW4
                         return;
                     }
 
-
                     cmd2.Parameters.AddWithValue("@Cognome", cognomeInput.Value);
                     if (cognomeInput.Value.Length > 50)
                     {
-
                         messaggio.InnerText = "Il cognome deve essere lungo massimo 50 caratteri.";
                         return;
                     }
@@ -99,7 +100,6 @@ namespace BW4
                     Response.Cookies.Add(user);
 
                     Response.Redirect("EffettuataRegistrazione.aspx");
-
                 }
                 catch (Exception ex)
                 {

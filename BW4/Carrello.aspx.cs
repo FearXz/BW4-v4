@@ -52,6 +52,7 @@ namespace BW4
             Session["cart"] = null;
             Response.Redirect(Request.RawUrl);
         }
+
         protected void Acquista_Click(object sender, EventArgs e)
         {
             Response.Redirect("Ordine.aspx");

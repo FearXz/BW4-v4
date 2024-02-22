@@ -24,7 +24,8 @@ namespace BW4
             {
                 conn.Open();
 
-                string query = "SELECT u.Username, t.TipoUtente FROM Utente AS u INNER JOIN TipoUtente AS t ON u.IDTipoUtente = t.IDTipoUtente WHERE Username = @username AND Password = @password";
+                string query =
+                    "SELECT u.Username, t.TipoUtente FROM Utente AS u INNER JOIN TipoUtente AS t ON u.IDTipoUtente = t.IDTipoUtente WHERE Username = @username AND Password = @password";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@username", usernameInput.Value);

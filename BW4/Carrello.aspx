@@ -27,11 +27,11 @@
                     </div>
                 </div>
             </ItemTemplate>
-    </asp:Repeater>
+        </asp:Repeater>
 
 
     </main>
-        <div class="d-flex justify-content-center my-5">
+    <div class="d-flex justify-content-center my-5">
         <asp:Button ID="Acquista" runat="server" Text="Acquista" CssClass=" btn btn-secondary" OnClick="Acquista_Click" />
     </div>
 </asp:Content>

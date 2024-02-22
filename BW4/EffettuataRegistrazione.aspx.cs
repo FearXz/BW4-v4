@@ -10,7 +10,6 @@ namespace BW4
             {
                 Response.Redirect("Default.aspx");
             }
-
         }
 
         protected void Home_Click(object sender, EventArgs e)

@@ -29,7 +29,8 @@ namespace BW4
             {
                 conn.Open();
 
-                string query = "SELECT DO.IDOrdine, NomeProdotto, Immagine, Prezzo, IndirizzoConsegna, DataAcquisto FROM DettaglioOrdine AS DO INNER JOIN Ordine AS O ON DO.IDOrdine = O.IDOrdine INNER JOIN Prodotto AS P ON DO.IDProdotto = P.IDProdotto WHERE DO.IDOrdine = @idOrdine;";
+                string query =
+                    "SELECT DO.IDOrdine, NomeProdotto, Immagine, Prezzo, IndirizzoConsegna, DataAcquisto FROM DettaglioOrdine AS DO INNER JOIN Ordine AS O ON DO.IDOrdine = O.IDOrdine INNER JOIN Prodotto AS P ON DO.IDProdotto = P.IDProdotto WHERE DO.IDOrdine = @idOrdine;";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@idOrdine", idOrdine);
 
@@ -38,7 +39,6 @@ namespace BW4
 
                 Repeater1.DataSource = reader;
                 Repeater1.DataBind();
-
             }
             catch (Exception ex)
             {
@@ -55,6 +55,5 @@ namespace BW4
             Session.Clear();
             Response.Redirect("Default.aspx");
         }
-
     }
 }

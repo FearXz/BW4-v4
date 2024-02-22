@@ -27,7 +27,6 @@ namespace BW4
             {
                 Response.Redirect("Default.aspx");
             }
-
         }
 
         protected void Procedi_Click(object sender, EventArgs e)
@@ -50,9 +49,6 @@ namespace BW4
 
         protected void ConfermaBottone_Click(object sender, EventArgs e)
         {
-
-
-
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
             SqlConnection conn = new SqlConnection(connectionString);
 
@@ -64,8 +60,6 @@ namespace BW4
                 string query = "SELECT IDUtente FROM Utente WHERE Username = @Username";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Username", username);
-
-
 
                 SqlDataReader reader = cmd.ExecuteReader();
 
@@ -79,10 +73,9 @@ namespace BW4
 
                 if (userID > 0)
                 {
-                    string query2 = "INSERT INTO Ordine (IDUtente, IndirizzoConsegna, DataAcquisto ) VALUES (@IDUtente, @IndirizzoConsegna, @DataAcquisto); SELECT SCOPE_IDENTITY();";
+                    string query2 =
+                        "INSERT INTO Ordine (IDUtente, IndirizzoConsegna, DataAcquisto ) VALUES (@IDUtente, @IndirizzoConsegna, @DataAcquisto); SELECT SCOPE_IDENTITY();";
                     SqlCommand cmd2 = new SqlCommand(query2, conn);
-
-
 
                     cmd2.Parameters.AddWithValue("@IDUtente", userID);
                     cmd2.Parameters.AddWithValue("@IndirizzoConsegna", Session["Indirizzo"]);
@@ -94,8 +87,8 @@ namespace BW4
 
                     foreach (Prodotto prodotto in cart)
                     {
-
-                        string query3 = "INSERT INTO DettaglioOrdine (IDOrdine, IDProdotto, Quantita) VALUES (@IDOrdine, @IDProdotto, @Quantita)";
+                        string query3 =
+                            "INSERT INTO DettaglioOrdine (IDOrdine, IDProdotto, Quantita) VALUES (@IDOrdine, @IDProdotto, @Quantita)";
                         SqlCommand cmd3 = new SqlCommand(query3, conn);
 
                         cmd3.Parameters.AddWithValue("@IDOrdine", idOrdine);
@@ -111,10 +104,10 @@ namespace BW4
             {
                 Response.Write("Error: " + ex.Message);
             }
-            finally { conn.Close(); }
-
-
-
+            finally
+            {
+                conn.Close();
+            }
         }
     }
 }

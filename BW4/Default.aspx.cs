@@ -14,6 +14,13 @@ namespace BW4
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["toast"] != null)
+            {
+                toastText.InnerText = Session["toast"].ToString();
+                string script = "$(document).ready(function() { showToast() })";
+                ScriptManager.RegisterStartupScript(this, GetType(), "ShowToast", script, true);
+                Session["toast"] = null;
+            }
 
             if (!IsPostBack)
             {
@@ -31,9 +38,13 @@ namespace BW4
             {
                 conn.Open();
 
-                paginaRichiesta = Request.QueryString["pagina"] != null ? Convert.ToInt32(Request.QueryString["pagina"]) : 1;
+                paginaRichiesta =
+                    Request.QueryString["pagina"] != null
+                        ? Convert.ToInt32(Request.QueryString["pagina"])
+                        : 1;
 
-                string query = $"SELECT * FROM Prodotto WHERE Attivo = 1 ORDER BY IDProdotto OFFSET {(paginaRichiesta - 1) * ProdottiPerPagina} ROWS FETCH NEXT {ProdottiPerPagina} ROWS ONLY";
+                string query =
+                    $"SELECT * FROM Prodotto WHERE Attivo = 1 ORDER BY IDProdotto OFFSET {(paginaRichiesta - 1) * ProdottiPerPagina} ROWS FETCH NEXT {ProdottiPerPagina} ROWS ONLY";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
 
@@ -43,7 +54,6 @@ namespace BW4
 
                 while (reader.Read())
                 {
-
                     Prodotto prodotto = new Prodotto();
                     prodotto.Id = Convert.ToInt32(reader["IDProdotto"]);
                     prodotto.NomeProdotto = reader.GetString(1);
@@ -76,7 +86,7 @@ namespace BW4
             try
             {
                 conn.Open();
-                string query = "SELECT COUNT(*) FROM Prodotto";
+                string query = "SELECT COUNT(*) FROM Prodotto WHERE Attivo = 1";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 int numeroTotaleProdotti = (int)cmd.ExecuteScalar();
                 return (int)Math.Ceiling((double)numeroTotaleProdotti / ProdottiPerPagina);
@@ -93,7 +103,6 @@ namespace BW4
 
         protected void btnPrecedente_Click(object sender, EventArgs e)
         {
-
             if (paginaRichiesta > 1)
             {
                 paginaRichiesta--;
@@ -103,7 +112,6 @@ namespace BW4
 
         protected void btnSuccessivo_Click(object sender, EventArgs e)
         {
-
             if (paginaRichiesta < CalcolaNumeroPagine())
             {
                 paginaRichiesta++;
@@ -114,7 +122,6 @@ namespace BW4
                 paginaRichiesta = 1;
                 Response.Redirect($"{Request.Path}?pagina={paginaRichiesta}");
             }
-
         }
 
         protected void addToCart_Click(object sender, EventArgs e)
@@ -152,6 +159,9 @@ namespace BW4
 
                     cart.Add(prodotto);
                     Session["cart"] = cart;
+
+                    Session["toast"] = $"{prodotto.NomeProdotto} aggiunto al carrello. ";
+
                     Response.Redirect(Request.RawUrl);
                 }
             }
@@ -159,7 +169,10 @@ namespace BW4
             {
                 Response.Write(ex.Message);
             }
-            finally { conn.Close(); }
+            finally
+            {
+                conn.Close();
+            }
         }
     }
 }

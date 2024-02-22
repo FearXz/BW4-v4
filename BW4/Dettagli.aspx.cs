@@ -38,22 +38,25 @@ namespace BW4
                     prezzo.InnerText = reader.GetDecimal(3).ToString();
                     image.Src = reader.GetString(4);
                     addToCart.CommandArgument = reader.GetInt32(0).ToString();
-
                 }
             }
             catch (Exception ex)
             {
                 Response.Write(ex.Message);
             }
-            finally { conn.Close(); }
+            finally
+            {
+                conn.Close();
+            }
         }
-
 
         protected void addToCart_Click(object sender, EventArgs e)
         {
             string idString = ((Button)sender).CommandArgument;
             int id = int.Parse(idString);
-            int quantity = !string.IsNullOrEmpty(quantityInput.Value) ? int.Parse(quantityInput.Value) : 1;
+            int quantity = !string.IsNullOrEmpty(quantityInput.Value)
+                ? int.Parse(quantityInput.Value)
+                : 1;
 
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
             SqlConnection conn = new SqlConnection(connectionString);
@@ -96,8 +99,10 @@ namespace BW4
             {
                 Response.Write(ex.Message);
             }
-            finally { conn.Close(); }
+            finally
+            {
+                conn.Close();
+            }
         }
-
     }
 }

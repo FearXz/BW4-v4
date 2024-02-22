@@ -30,6 +30,29 @@
                 <asp:Button ID="btnSuccessivo" runat="server" CssClass="btn btn-sm btnPage ms-2" Text="Successivo" OnClick="btnSuccessivo_Click" />
             </div>
         </div>
+
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" id="toast">
+            <div class="toast-header">
+                <strong class="me-auto">Notifica</strong>
+                <button type="button" class="ml-2 mb-1 close btn btn-sm btn-danger" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="toastText" class="toast-body" runat="server">
+                Prodotto aggiunto al carrello
+            </div>
+        </div>
+
     </main>
+
+    <script>
+        function showToast() {
+            $('.toast').toast('show');
+
+            $(document).on('click', '.toast .close', function () {
+                $(this).closest('.toast').toast('hide');
+            });
+        }
+    </script>
 
 </asp:Content>

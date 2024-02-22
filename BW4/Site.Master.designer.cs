@@ -15,15 +15,6 @@ namespace BW4
     {
 
         /// <summary>
-        /// Controllo AdminLink.
-        /// </summary>
-        /// <remarks>
-        /// Campo generato automaticamente.
-        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink AdminLink;
-
-        /// <summary>
         /// Controllo storico.
         /// </summary>
         /// <remarks>
@@ -40,6 +31,15 @@ namespace BW4
         /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink HyperLink2;
+
+        /// <summary>
+        /// Controllo AdminLink.
+        /// </summary>
+        /// <remarks>
+        /// Campo generato automaticamente.
+        /// Per la modifica, spostare la dichiarazione di campo dal file di progettazione al file code-behind.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink AdminLink;
 
         /// <summary>
         /// Controllo usernameLoggedIn.
