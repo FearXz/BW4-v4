@@ -33,6 +33,10 @@ namespace BW4
             {
                 AdminLink.CssClass += AdminLink.CssClass.Replace("d-none", "") + "nav-link fw-bold";
             }
+            if (Request.Cookies["user"] != null)
+            {
+                storico.Visible = true;
+            }
         }
 
         protected void Cart_Click(object sender, EventArgs e)

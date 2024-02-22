@@ -52,7 +52,8 @@
                         <li class="nav-item"><a class="nav-link linkHover" runat="server" href="~/">Lista Prodotti</a></li>
                         <li class="nav-item"><a class="nav-link linkHover" runat="server" href="~/Carrello">Carrello</a></li>
                         <li class="nav-item">
-                            <asp:HyperLink href="Admin.aspx" ID="AdminLink" class="nav-link d-none text-white" runat="server">Admin</asp:HyperLink></li>
+                         <asp:HyperLink href="Admin.aspx" ID="AdminLink" class="nav-link d-none text-white" runat="server">Admin</asp:HyperLink></li>
+                        <li class="nav-item" id="storico" runat="server" visible="false"><asp:HyperLink href="OrdiniEffetuati.aspx" ID="HyperLink2" class="nav-link linkHover" runat="server">Storico Ordini</asp:HyperLink></li>
                     </ul>
                 </div>
                 <div class="mx-2">

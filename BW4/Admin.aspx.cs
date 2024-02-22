@@ -194,7 +194,7 @@ namespace BW4
             {
                 conn.Open();
 
-                string query = "INSERT INTO Prodotto(NomeProdotto, Descrizione, Prezzo, Immagine) VALUES ( @NomeProdotto, @Descrizione, @Prezzo, @Immagine)";
+                string query = "INSERT INTO Prodotto(NomeProdotto, Descrizione, Prezzo, Immagine,Attivo) VALUES ( @NomeProdotto, @Descrizione, @Prezzo, @Immagine,@Attivo)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
 
@@ -203,6 +203,7 @@ namespace BW4
                 cmd.Parameters.AddWithValue("@Descrizione", DescrizioneIn.Text);
                 cmd.Parameters.AddWithValue("@Prezzo", PrezzoIn.Text);
                 cmd.Parameters.AddWithValue("@Immagine", ImmagineIn.Text);
+                cmd.Parameters.AddWithValue("@Attivo", 1);
 
                 SqlDataReader reader = cmd.ExecuteReader();
 

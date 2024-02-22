@@ -126,6 +126,7 @@
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
     <Content Include="Ordine.aspx" />
+    <Content Include="OrdiniEffettuati.aspx" />
     <Content Include="Registrazione.aspx" />
     <Content Include="RiepilogoOrdine.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -243,6 +244,13 @@
     </Compile>
     <Compile Include="Ordine.aspx.designer.cs">
       <DependentUpon>Ordine.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="OrdiniEffettuati.aspx.cs">
+      <DependentUpon>OrdiniEffettuati.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="OrdiniEffettuati.aspx.designer.cs">
+      <DependentUpon>OrdiniEffettuati.aspx</DependentUpon>
     </Compile>
     <Compile Include="Prodotto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
