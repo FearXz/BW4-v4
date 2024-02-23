@@ -21,11 +21,13 @@ namespace BW4
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
             SqlConnection conn = new SqlConnection(connectionString);
 
+            CaricaProdottiCasuali(5);
+
             try
             {
                 conn.Open();
 
-                string query = "SELECT * FROM Prodotto WHERE IDProdotto = " + id;
+                string query = "SELECT * FROM Prodotto WHERE IDProdotto = " + id + "AND Attivo = 1";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
 
@@ -39,6 +41,49 @@ namespace BW4
                     image.Src = reader.GetString(4);
                     addToCart.CommandArgument = reader.GetInt32(0).ToString();
                 }
+            }
+            catch (Exception ex)
+            {
+                Response.Write(ex.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        protected void CaricaProdottiCasuali(int numeroProdotti)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
+            SqlConnection conn = new SqlConnection(connectionString);
+
+            try
+            {
+                conn.Open();
+
+                string queryProdottiCasuali =
+                    $"SELECT TOP {numeroProdotti} * FROM Prodotto WHERE Attivo = 1 ORDER BY NEWID()";
+
+                SqlCommand cmdProdottiCasuali = new SqlCommand(queryProdottiCasuali, conn);
+
+                SqlDataReader reader = cmdProdottiCasuali.ExecuteReader();
+
+                List<Prodotto> listaProdotti = new List<Prodotto>();
+
+                while (reader.Read())
+                {
+                    Prodotto prodotto = new Prodotto();
+                    prodotto.Id = Convert.ToInt32(reader["IDProdotto"]);
+                    prodotto.NomeProdotto = reader.GetString(1);
+                    prodotto.Descrizione = reader.GetString(2);
+                    prodotto.Prezzo = reader.GetDecimal(3);
+                    prodotto.Immagine = reader.GetString(4);
+
+                    listaProdotti.Add(prodotto);
+                }
+
+                Repeater2.DataSource = listaProdotti;
+                Repeater2.DataBind();
             }
             catch (Exception ex)
             {
