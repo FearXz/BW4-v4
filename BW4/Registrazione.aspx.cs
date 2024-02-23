@@ -9,12 +9,14 @@ namespace BW4
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Se l'utente è già loggato, lo reindirizzo alla home
             if (Request.Cookies["user"] != null)
             {
                 Response.Redirect("Default.aspx");
             }
         }
 
+        // Registrazione di un nuovo utente se non è già presente nel database
         protected void RegistratiButton_Click(object sender, EventArgs e)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
@@ -31,6 +33,7 @@ namespace BW4
 
                 if (count > 0)
                 {
+                    // Se l'utente è già presente nel database, non lo registro
                     messaggio.InnerText = "Email o Username giÃ  in uso.";
                     return;
                 }
@@ -41,12 +44,14 @@ namespace BW4
 
                 try
                 {
+                    // Se l'utente non è presente nel database, lo registro
                     string query2 =
                         "INSERT into Utente(Nome, Cognome, Email, DataNascita, Username, Password, IDTipoUtente) VALUES (@Nome, @Cognome, @Email, @DataNascita, @Username, @Password, 2)";
 
                     SqlCommand cmd2 = new SqlCommand(query2, conn);
 
                     cmd2.Parameters.AddWithValue("@Nome", nomeInput.Value);
+                    // Controllo che il nome sia lungo massimo 50 caratteri
                     if (nomeInput.Value.Length > 50)
                     {
                         messaggio.InnerText = "Il nome deve essere lungo massimo 50 caratteri.";
@@ -68,6 +73,7 @@ namespace BW4
                     }
 
                     cmd2.Parameters.AddWithValue("@DataNascita", dataInput.Value);
+                    // Controllo che l'utente abbia almeno 18 anni
                     DateTime dataNascita = Convert.ToDateTime(dataInput.Value);
                     DateTime oggi = DateTime.Today;
                     if ((oggi - dataNascita).TotalDays < 365 * 18)
@@ -93,7 +99,7 @@ namespace BW4
                     cmd2.Parameters.AddWithValue("@IDTipoUtente", 2);
 
                     cmd2.ExecuteNonQuery();
-
+                    // Se la registrazione è andata a buon fine, reindirizzo l'utente alla pagina di conferma
                     HttpCookie user = new HttpCookie("user");
                     user["username"] = usernameInput.Value;
                     user["type"] = "2";

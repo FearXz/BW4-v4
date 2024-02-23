@@ -10,30 +10,35 @@ namespace BW4
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            //Controllo se l'utente è loggato e se è un admin
             if (Request.Cookies["user"] != null && Request.Cookies["user"]["type"] == "ADMIN")
             {
+                //Controllo se è stato passato un parametro
                 string parametro = Request.QueryString["IdProdotto"];
                 if (!IsPostBack)
                 {
+                    //Se è stato passato un parametro, allora devo mostrare il form per la modifica del prodotto
                     if (!string.IsNullOrEmpty(parametro))
                     {
                         prodotti.Visible = false;
                         form.Visible = true;
                         aggiungiProdotto.Visible = false;
-                        string connectionString2 = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
+                        string connectionString2 = ConfigurationManager
+                            .ConnectionStrings["MyDb"]
+                            .ToString();
                         SqlConnection conn2 = new SqlConnection(connectionString2);
 
                         try
                         {
                             conn2.Open();
-
+                            //Query per selezionare il prodotto con l'id passato come parametro
                             string query = "SELECT * FROM Prodotto WHERE IDProdotto =" + parametro;
 
                             SqlCommand cmd = new SqlCommand(query, conn2);
 
                             SqlDataReader reader = cmd.ExecuteReader();
 
+                            //Riempio i campi del form con i dati del prodotto
                             while (reader.Read())
                             {
                                 IdProdottoIn.Text = Convert.ToString(reader["IDProdotto"]);
@@ -52,16 +57,17 @@ namespace BW4
                             conn2.Close();
                         }
                     }
-
                     else
                     {
-                        string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
+                        string connectionString = ConfigurationManager
+                            .ConnectionStrings["MyDb"]
+                            .ToString();
                         SqlConnection conn = new SqlConnection(connectionString);
 
                         try
                         {
                             conn.Open();
-
+                            //Query per selezionare tutti i prodotti attivi
                             string query = "SELECT * FROM Prodotto WHERE Attivo = @Attivo";
 
                             SqlCommand cmd = new SqlCommand(query, conn);
@@ -70,7 +76,7 @@ namespace BW4
                             SqlDataReader reader = cmd.ExecuteReader();
 
                             List<Prodotto> listaProdotti = new List<Prodotto>();
-
+                            //Riempio la lista con i prodotti selezionati
                             while (reader.Read())
                             {
                                 Prodotto prodotto = new Prodotto();
@@ -81,7 +87,6 @@ namespace BW4
                                 prodotto.Immagine = Convert.ToString(reader["Immagine"]);
 
                                 listaProdotti.Add(prodotto);
-
                             }
 
                             Repeater1.DataSource = listaProdotti;
@@ -91,7 +96,10 @@ namespace BW4
                         {
                             Response.Write(ex.Message);
                         }
-                        finally { conn.Close(); }
+                        finally
+                        {
+                            conn.Close();
+                        }
                     }
                 }
             }
@@ -101,6 +109,7 @@ namespace BW4
             }
         }
 
+        // Modifica_Click reinstrada l'utente alla pagina Admin con l'id del prodotto da modificare come parametro
         protected void Modifica_Click(object sender, EventArgs e)
         {
             string idString = ((Button)sender).CommandArgument;
@@ -109,6 +118,7 @@ namespace BW4
             Response.Redirect("Admin.aspx?IdProdotto=" + id);
         }
 
+        // Disattiva_Click disattiva il prodotto con l'id passato come parametro
         protected void modificaProdotto_Click(object sender, EventArgs e)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
@@ -119,8 +129,9 @@ namespace BW4
             {
                 conn.Open();
 
-
-                string query = "UPDATE Prodotto SET NomeProdotto = @Nome, Descrizione = @Descrizione, Prezzo = @Prezzo, Immagine= @Immagine WHERE IdProdotto = @id";
+                //Query per aggiornare i dati del prodotto
+                string query =
+                    "UPDATE Prodotto SET NomeProdotto = @Nome, Descrizione = @Descrizione, Prezzo = @Prezzo, Immagine= @Immagine WHERE IdProdotto = @id";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
 
@@ -133,27 +144,30 @@ namespace BW4
                 cmd.Parameters.AddWithValue("@Immagine", ImmagineIn.Text);
 
                 SqlDataReader reader = cmd.ExecuteReader();
-
             }
             catch (Exception ex)
             {
                 Response.Write(ex.Message);
             }
-            finally { conn.Close(); }
-
+            finally
+            {
+                conn.Close();
+            }
+            //Reindirizzo l'utente alla pagina Admin e nascondo il form
             Response.Redirect("Admin.aspx");
             form.Visible = false;
             prodotti.Visible = true;
-
         }
 
+        // Aggiungi_Click mostra il form per l'aggiunta di un nuovo prodotto
         protected void Aggiungi_Click(object sender, EventArgs e)
         {
             prodotti.Visible = false;
             form.Visible = true;
             modificaProdotto.Visible = false;
-
         }
+
+        // Disattiva_Click disattiva il prodotto con l'id passato come parametro
         protected void DisattivaProdotto_Click(object sender, EventArgs e)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
@@ -165,14 +179,14 @@ namespace BW4
             {
                 conn.Open();
 
-                string query = "UPDATE Prodotto SET Attivo = @Attivo WHERE IDProdotto = @IDProdotto";
+                string query =
+                    "UPDATE Prodotto SET Attivo = @Attivo WHERE IDProdotto = @IDProdotto";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@idProdotto", idProdotto);
                 cmd.Parameters.AddWithValue("@Attivo", 0);
 
                 SqlDataReader reader = cmd.ExecuteReader();
-
             }
             catch (Exception ex)
             {
@@ -185,6 +199,7 @@ namespace BW4
             }
         }
 
+        // aggiungiProdotto_Click aggiunge un nuovo prodotto al database
         protected void aggiungiProdotto_Click(object sender, EventArgs e)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
@@ -194,10 +209,10 @@ namespace BW4
             {
                 conn.Open();
 
-                string query = "INSERT INTO Prodotto(NomeProdotto, Descrizione, Prezzo, Immagine,Attivo) VALUES ( @NomeProdotto, @Descrizione, @Prezzo, @Immagine,@Attivo)";
+                string query =
+                    "INSERT INTO Prodotto(NomeProdotto, Descrizione, Prezzo, Immagine,Attivo) VALUES ( @NomeProdotto, @Descrizione, @Prezzo, @Immagine,@Attivo)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
-
 
                 cmd.Parameters.AddWithValue("@NomeProdotto", NomeProdottoIn.Text);
                 cmd.Parameters.AddWithValue("@Descrizione", DescrizioneIn.Text);
@@ -206,13 +221,16 @@ namespace BW4
                 cmd.Parameters.AddWithValue("@Attivo", 1);
 
                 SqlDataReader reader = cmd.ExecuteReader();
-
             }
             catch (Exception ex)
             {
                 Response.Write(ex.Message);
             }
-            finally { conn.Close(); Response.Redirect("Admin.aspx"); }
+            finally
+            {
+                conn.Close();
+                Response.Redirect("Admin.aspx");
+            }
         }
     }
 }

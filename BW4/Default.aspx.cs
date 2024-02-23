@@ -9,13 +9,16 @@ namespace BW4
 {
     public partial class _Default : Page
     {
+        // Numero di prodotti da visualizzare per pagina
         private const int ProdottiPerPagina = 5;
         private int paginaRichiesta = 1;
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Se è stata aggiunta una notifica, la mostro
             if (Session["toast"] != null)
             {
+                // inietto il codice javascript per mostrare la notifica e cancello la sessione
                 toastText.InnerText = Session["toast"].ToString();
                 string script = "$(document).ready(function() { showToast() })";
                 ScriptManager.RegisterStartupScript(this, GetType(), "ShowToast", script, true);
@@ -29,6 +32,7 @@ namespace BW4
             CaricaDatiPagina();
         }
 
+        // Metodo per caricare i dati della pagina in base alla pagina richiesta
         protected void CaricaDatiPagina()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
@@ -78,6 +82,7 @@ namespace BW4
             }
         }
 
+        // Metodo per calcolare il numero di pagine necessarie per visualizzare tutti i prodotti
         protected int CalcolaNumeroPagine()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
@@ -101,8 +106,10 @@ namespace BW4
             }
         }
 
+        // Metodo per spostarsi alla pagina precedente
         protected void btnPrecedente_Click(object sender, EventArgs e)
         {
+            // Se la pagina richiesta è maggiore di 1, la decremento e ricarico la pagina
             if (paginaRichiesta > 1)
             {
                 paginaRichiesta--;
@@ -110,8 +117,10 @@ namespace BW4
             }
         }
 
+        // Metodo per spostarsi alla pagina successiva
         protected void btnSuccessivo_Click(object sender, EventArgs e)
         {
+            // Se la pagina richiesta è minore del numero di pagine, la incremento e ricarico la pagina
             if (paginaRichiesta < CalcolaNumeroPagine())
             {
                 paginaRichiesta++;
@@ -124,8 +133,11 @@ namespace BW4
             }
         }
 
+        // Metodo per aggiungere un prodotto al carrello
+
         protected void addToCart_Click(object sender, EventArgs e)
         {
+            // Recupero l'id del prodotto dal CommandArgument del bottone
             string idString = ((Button)sender).CommandArgument;
             int id = int.Parse(idString);
 
@@ -159,7 +171,7 @@ namespace BW4
 
                     cart.Add(prodotto);
                     Session["cart"] = cart;
-
+                    // aggiungo una notifica alla sessione per mostrare un messaggio all'utente
                     Session["toast"] = $"{prodotto.NomeProdotto} aggiunto al carrello. ";
 
                     Response.Redirect(Request.RawUrl);

@@ -8,6 +8,7 @@ namespace BW4
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Verifica se l'utente è loggato
             if (Request.Cookies["user"] == null)
             {
                 Response.Redirect("Default.aspx");

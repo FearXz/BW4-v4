@@ -9,12 +9,12 @@ namespace BW4
         protected void Page_Load(object sender, EventArgs e)
         {
             List<Prodotto> cart = (List<Prodotto>)Session["cart"];
-
+            // Se il carrello non è vuoto e la sessione è attiva allora mostra i prodotti nel carrello
             if (Session["cart"] != null && cart.Count > 0)
             {
                 Repeater1.DataSource = cart;
                 Repeater1.DataBind();
-
+                // Calcola il totale del carrello
                 decimal totale = 0;
                 foreach (Prodotto prodotto in cart)
                 {
@@ -28,6 +28,7 @@ namespace BW4
             }
         }
 
+        // Rimuove un prodotto dal carrello e aggiorna la pagina
         protected void DeleteFromCart_Click(object sender, EventArgs e)
         {
             string idString = ((Button)sender).CommandArgument;
@@ -47,12 +48,14 @@ namespace BW4
             Response.Redirect(Request.RawUrl);
         }
 
+        // Rimuove tutti i prodotti dal carrello e aggiorna la pagina
         protected void DeleteAll_Click(object sender, EventArgs e)
         {
             Session["cart"] = null;
             Response.Redirect(Request.RawUrl);
         }
 
+        // Reindirizza alla pagina di ordine se il carrello non è vuoto
         protected void Acquista_Click(object sender, EventArgs e)
         {
             Response.Redirect("Ordine.aspx");

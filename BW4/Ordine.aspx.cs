@@ -11,11 +11,12 @@ namespace BW4
         {
             List<Prodotto> cart = (List<Prodotto>)Session["cart"];
 
+            // Se il carrello è vuoto o non esiste, reindirizza alla home
             if (Session["cart"] != null && cart.Count > 0)
             {
                 Repeater1.DataSource = cart;
                 Repeater1.DataBind();
-
+                // Calcola il totale del carrello
                 decimal totale = 0;
                 foreach (Prodotto prodotto in cart)
                 {
@@ -29,12 +30,16 @@ namespace BW4
             }
         }
 
+        // rende visibile il form per l'inserimento dell'indirizzo
+        // e nasconde il form per la selezione dei prodotti
         protected void Procedi_Click(object sender, EventArgs e)
         {
             prodotti.Visible = false;
             form.Visible = true;
         }
 
+        // rende visibile il form per l'inserimento dell'indirizzo
+        // e nasconde il form per la selezione dei prodotti
         protected void IndirizzoProcedi_Click(object sender, EventArgs e)
         {
             Session["Indirizzo"] = IndirizzoIn.Text;
@@ -47,6 +52,7 @@ namespace BW4
             conferma.Visible = true;
         }
 
+        // controlla se l'utente esiste e se esiste inserisce l'ordine nel database
         protected void ConfermaBottone_Click(object sender, EventArgs e)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
@@ -56,21 +62,21 @@ namespace BW4
             {
                 conn.Open();
                 string username = Request.Cookies["user"]["username"];
-
+                // Controlla se l'utente esiste
                 string query = "SELECT IDUtente FROM Utente WHERE Username = @Username";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Username", username);
-
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 int userID = -1;
 
                 if (reader.Read())
                 {
+                    // Se l'utente esiste, salva l'IDUtente
                     userID = reader.GetInt32(0);
                 }
                 reader.Close();
-
+                // Se l'utente esiste, inserisce l'ordine nel database
                 if (userID > 0)
                 {
                     string query2 =
@@ -80,11 +86,11 @@ namespace BW4
                     cmd2.Parameters.AddWithValue("@IDUtente", userID);
                     cmd2.Parameters.AddWithValue("@IndirizzoConsegna", Session["Indirizzo"]);
                     cmd2.Parameters.AddWithValue("@DataAcquisto", DateTime.Now);
-
+                    // Salva l'IDOrdine appena inserito
                     int idOrdine = Convert.ToInt32(cmd2.ExecuteScalar());
 
                     List<Prodotto> cart = (List<Prodotto>)Session["cart"];
-
+                    // Per ogni prodotto nel carrello, inserisce un dettaglio ordine del relativo IDOrdine
                     foreach (Prodotto prodotto in cart)
                     {
                         string query3 =

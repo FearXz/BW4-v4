@@ -10,6 +10,7 @@ namespace BW4
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // Se non è presente l'ID del prodotto, reindirizza alla pagina principale
             if (Request.QueryString["IdProdotto"] == null)
             {
                 Response.Redirect("Default.aspx");
@@ -21,6 +22,7 @@ namespace BW4
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
             SqlConnection conn = new SqlConnection(connectionString);
 
+            // Carica i prodotti casuali
             CaricaProdottiCasuali(5);
 
             try
@@ -52,6 +54,7 @@ namespace BW4
             }
         }
 
+        // Carica i prodotti casuali dal database
         protected void CaricaProdottiCasuali(int numeroProdotti)
         {
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
@@ -95,10 +98,13 @@ namespace BW4
             }
         }
 
+        // Aggiunge il prodotto al carrello e reindirizza alla stessa pagina
         protected void addToCart_Click(object sender, EventArgs e)
         {
             string idString = ((Button)sender).CommandArgument;
             int id = int.Parse(idString);
+
+            // Se la quantità è vuota, imposta la quantità a 1
             int quantity = !string.IsNullOrEmpty(quantityInput.Value)
                 ? int.Parse(quantityInput.Value)
                 : 1;
@@ -115,7 +121,7 @@ namespace BW4
                 SqlCommand cmd = new SqlCommand(query, conn);
 
                 SqlDataReader reader = cmd.ExecuteReader();
-
+                // se il carrello non esiste, crea un nuovo carrello
                 if (Session["cart"] == null)
                 {
                     Session["cart"] = new List<Prodotto>();
@@ -123,6 +129,7 @@ namespace BW4
 
                 if (reader.Read())
                 {
+                    // Aggiunge il prodotto al carrello
                     List<Prodotto> cart = (List<Prodotto>)Session["cart"];
                     Prodotto prodotto = new Prodotto();
                     prodotto.Id = Convert.ToInt32(reader["IDProdotto"]);
@@ -135,7 +142,7 @@ namespace BW4
                     {
                         cart.Add(prodotto);
                     }
-
+                    // Aggiorna il carrello nella sessione e reindirizza alla stessa pagina
                     Session["cart"] = cart;
                     Response.Redirect(Request.RawUrl);
                 }
