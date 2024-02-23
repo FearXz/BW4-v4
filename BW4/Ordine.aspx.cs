@@ -58,61 +58,68 @@ namespace BW4
             string connectionString = ConfigurationManager.ConnectionStrings["MyDb"].ToString();
             SqlConnection conn = new SqlConnection(connectionString);
 
-            try
+            if (Request.Cookies["user"] != null)
             {
-                conn.Open();
-                string username = Request.Cookies["user"]["username"];
-                // Controlla se l'utente esiste
-                string query = "SELECT IDUtente FROM Utente WHERE Username = @Username";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@Username", username);
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                int userID = -1;
-
-                if (reader.Read())
+                try
                 {
-                    // Se l'utente esiste, salva l'IDUtente
-                    userID = reader.GetInt32(0);
-                }
-                reader.Close();
-                // Se l'utente esiste, inserisce l'ordine nel database
-                if (userID > 0)
-                {
-                    string query2 =
-                        "INSERT INTO Ordine (IDUtente, IndirizzoConsegna, DataAcquisto ) VALUES (@IDUtente, @IndirizzoConsegna, @DataAcquisto); SELECT SCOPE_IDENTITY();";
-                    SqlCommand cmd2 = new SqlCommand(query2, conn);
+                    conn.Open();
+                    string username = Request.Cookies["user"]["username"];
+                    // Controlla se l'utente esiste
+                    string query = "SELECT IDUtente FROM Utente WHERE Username = @Username";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@Username", username);
+                    SqlDataReader reader = cmd.ExecuteReader();
 
-                    cmd2.Parameters.AddWithValue("@IDUtente", userID);
-                    cmd2.Parameters.AddWithValue("@IndirizzoConsegna", Session["Indirizzo"]);
-                    cmd2.Parameters.AddWithValue("@DataAcquisto", DateTime.Now);
-                    // Salva l'IDOrdine appena inserito
-                    int idOrdine = Convert.ToInt32(cmd2.ExecuteScalar());
+                    int userID = -1;
 
-                    List<Prodotto> cart = (List<Prodotto>)Session["cart"];
-                    // Per ogni prodotto nel carrello, inserisce un dettaglio ordine del relativo IDOrdine
-                    foreach (Prodotto prodotto in cart)
+                    if (reader.Read())
                     {
-                        string query3 =
-                            "INSERT INTO DettaglioOrdine (IDOrdine, IDProdotto, Quantita) VALUES (@IDOrdine, @IDProdotto, @Quantita)";
-                        SqlCommand cmd3 = new SqlCommand(query3, conn);
-
-                        cmd3.Parameters.AddWithValue("@IDOrdine", idOrdine);
-                        cmd3.Parameters.AddWithValue("@IDProdotto", prodotto.Id);
-                        cmd3.Parameters.AddWithValue("@Quantita", 1);
-
-                        cmd3.ExecuteNonQuery();
+                        // Se l'utente esiste, salva l'IDUtente
+                        userID = reader.GetInt32(0);
                     }
-                    Response.Redirect("RiepilogoOrdine.aspx?idOrdine=" + idOrdine);
+                    reader.Close();
+                    // Se l'utente esiste, inserisce l'ordine nel database
+                    if (userID > 0)
+                    {
+                        string query2 =
+                            "INSERT INTO Ordine (IDUtente, IndirizzoConsegna, DataAcquisto ) VALUES (@IDUtente, @IndirizzoConsegna, @DataAcquisto); SELECT SCOPE_IDENTITY();";
+                        SqlCommand cmd2 = new SqlCommand(query2, conn);
+
+                        cmd2.Parameters.AddWithValue("@IDUtente", userID);
+                        cmd2.Parameters.AddWithValue("@IndirizzoConsegna", Session["Indirizzo"]);
+                        cmd2.Parameters.AddWithValue("@DataAcquisto", DateTime.Now);
+                        // Salva l'IDOrdine appena inserito
+                        int idOrdine = Convert.ToInt32(cmd2.ExecuteScalar());
+
+                        List<Prodotto> cart = (List<Prodotto>)Session["cart"];
+                        // Per ogni prodotto nel carrello, inserisce un dettaglio ordine del relativo IDOrdine
+                        foreach (Prodotto prodotto in cart)
+                        {
+                            string query3 =
+                                "INSERT INTO DettaglioOrdine (IDOrdine, IDProdotto, Quantita) VALUES (@IDOrdine, @IDProdotto, @Quantita)";
+                            SqlCommand cmd3 = new SqlCommand(query3, conn);
+
+                            cmd3.Parameters.AddWithValue("@IDOrdine", idOrdine);
+                            cmd3.Parameters.AddWithValue("@IDProdotto", prodotto.Id);
+                            cmd3.Parameters.AddWithValue("@Quantita", 1);
+
+                            cmd3.ExecuteNonQuery();
+                        }
+                        Response.Redirect("RiepilogoOrdine.aspx?idOrdine=" + idOrdine);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("Error: " + ex.Message);
+                }
+                finally
+                {
+                    conn.Close();
                 }
             }
-            catch (Exception ex)
+            else
             {
-                Response.Write("Error: " + ex.Message);
-            }
-            finally
-            {
-                conn.Close();
+                Response.Redirect("Login.aspx");
             }
         }
     }
